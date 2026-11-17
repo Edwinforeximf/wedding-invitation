@@ -220,6 +220,20 @@ body.opened nav,body.opened #music{display:flex}
 #section-cover:after{bottom:-10%;left:-12%;transform:rotate(-20deg)}
 #section-cover .wrap{position:relative;z-index:2}
 
+
+/* Reference-inspired watercolor refinement; retains original ZIP layout */
+#section-cover{background:radial-gradient(ellipse 75% 38% at 10% 5%,rgba(252,201,217,.28),transparent 80%),radial-gradient(ellipse 85% 32% at 90% 100%,rgba(246,195,210,.28),transparent 80%),var(--bg) url("assets/bg-pattern.jpg") center/cover}
+#section-cover .wrap{width:100%;max-width:430px}
+#section-cover .cover-names{font-size:clamp(46px,11vw,68px);white-space:normal}
+#section-cover .save-the-date{font-size:clamp(39px,10vw,54px)}
+#section-cover .cover-guest{width:min(100%,350px);margin-top:6px}
+#section-cover .btn.solid{min-width:min(90%,310px);box-shadow:0 9px 26px rgba(62,8,26,.16)}
+#section-cover:before,#section-cover:after{filter:blur(13px);opacity:.45}
+#section-cover:before{background:radial-gradient(ellipse at 28% 30%,#f7b7c7 0 10%,transparent 45%),radial-gradient(ellipse at 70% 60%,#d77994 0 15%,transparent 48%)}
+#section-cover:after{background:radial-gradient(ellipse at 25% 65%,#efacc1 0 16%,transparent 45%),radial-gradient(ellipse at 75% 25%,#f7c8d2 0 12%,transparent 50%)}
+@media(max-width:480px){#section-cover{padding:16px 22px}#section-cover .wrap{gap:3px}#section-cover .cover-guest{padding:15px 18px;margin-bottom:22px}.event-card{padding:28px 18px}.photo{width:200px;height:250px}}
+@media(prefers-reduced-motion:reduce){.reveal{transition:none!important}}
+
 </style>
 </head>
 <body class="locked">
