@@ -240,6 +240,15 @@ nav{gap:2px!important;padding:5px 7px!important;bottom:12px!important;max-width:
 nav a{display:flex;align-items:center;justify-content:center;width:38px;height:36px;padding:0!important;font-size:21px!important;letter-spacing:0!important;line-height:1;border-radius:50%!important}
 @media(max-width:380px){nav a{width:34px;height:34px;font-size:19px!important}}
 
+
+/* Hide template placeholder couple ornaments, prevent empty image space */
+#Mempelai .person .orn{display:none;margin:0 auto 8px;max-width:min(70vw,242px);height:auto}
+#Mempelai .person{margin:24px 0 38px}
+#Mempelai .person .photo{margin-top:4px}
+#Mempelai .lead{margin-bottom:20px}
+.live-section{padding:55px 24px;background:var(--bg-deep)}
+.live-section #liveBlock{max-width:var(--maxw);margin:auto}
+
 </style>
 </head>
 <body class="locked">
@@ -363,13 +372,13 @@ const CONFIG = {
       <a class="btn" id="mapLink" target="_blank" rel="noopener">Buka Google Maps</a>
     </div>
 
-    <h3 class="script reveal" style="font-size:46px;margin-top:48px">Live Streaming</h3>
+    <div id="liveBlock"><h3 class="script reveal" style="font-size:46px;margin-top:20px">Live Streaming</h3>
     <p class="lead reveal">Meet us virtually to watch our wedding event which will be broadcast live via our Instagram account or please join the live meeting below</p>
     <div class="live-btns reveal">
       <a class="btn" id="liveYT" target="_blank" rel="noopener">Live YouTube</a>
       <a class="btn" id="liveIG" target="_blank" rel="noopener">Live Instagram</a>
     </div>
-  </div>
+  </div></div>
 </section>
 
 <!-- ============ SECTION: GALERI ============ -->
@@ -472,6 +481,14 @@ const CONFIG = {
   if(S.showNav==='false')document.querySelector('nav').style.setProperty('display','none','important');
   if(S.showMusic==='false')document.querySelector('#music').style.setProperty('display','none','important');
   if(S.showOrnaments==='true')document.querySelectorAll('img.corner').forEach(el=>el.style.setProperty('display','block','important'));
+  const personOrnaments=document.querySelectorAll('#Mempelai .person .orn');
+  [0,1].forEach(i=>{const el=personOrnaments[i];if(!el)return;const url=i===0?S.brideOrnament:S.groomOrnament;const enabled=i===0?S.showBrideOrnament:S.showGroomOrnament;el.style.display=enabled==='true'&&url?'block':'none';if(url)el.src=url});
+  applyText('#Mempelai .lead',S.coupleIntro);
+  applyText('#liveBlock h3',S.liveTitle);applyText('#liveBlock .lead',S.liveDescription);
+  const live=$('#liveBlock');if(S.showLive==='false')live.style.display='none';
+  const liveDest={afterCouple:'#Mempelai',afterEvents:'#Acara',afterGallery:'#galeri',afterRSVP:'#Wishes'}[S.livePlacement]||'#Acara';
+  if(liveDest!=='#Acara'){const holder=document.createElement('section');holder.id='livestream';holder.className='live-section';const wrap=document.createElement('div');wrap.className='wrap';holder.appendChild(wrap);wrap.appendChild(live);const target=document.querySelector(liveDest);target.insertAdjacentElement('afterend',holder)}
+
   setText('.cover-names',S.couple);setText('.hero-names',S.couple);setText('.closing .names',S.couple);
   setText('#Mempelai .person:nth-of-type(1) h3',S.brideShort);
   const persons=document.querySelectorAll('#Mempelai .person');
