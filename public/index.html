@@ -234,6 +234,12 @@ body.opened nav,body.opened #music{display:flex}
 @media(max-width:480px){#section-cover{padding:16px 22px}#section-cover .wrap{gap:3px}#section-cover .cover-guest{padding:15px 18px;margin-bottom:22px}.event-card{padding:28px 18px}.photo{width:200px;height:250px}}
 @media(prefers-reduced-motion:reduce){.reveal{transition:none!important}}
 
+
+/* Compact icon-only pill navigation */
+nav{gap:2px!important;padding:5px 7px!important;bottom:12px!important;max-width:calc(100vw - 24px);box-shadow:0 8px 28px rgba(45,7,22,.25)}
+nav a{display:flex;align-items:center;justify-content:center;width:38px;height:36px;padding:0!important;font-size:21px!important;letter-spacing:0!important;line-height:1;border-radius:50%!important}
+@media(max-width:380px){nav a{width:34px;height:34px;font-size:19px!important}}
+
 </style>
 </head>
 <body class="locked">
@@ -447,7 +453,7 @@ const CONFIG = {
 <!-- ============ FLOATING UI ============ -->
 <button id="music" aria-label="Musik">♪</button>
 <nav>
-  <a href="#buka">Home</a><a href="#Mempelai">Couple</a><a href="#Acara">Event</a><a href="#galeri">Gallery</a><a href="#Wishes">RSVP</a><a href="#gift">Gift</a>
+  <a href="#buka" aria-label="Home" title="Home">⌂</a><a href="#Mempelai" aria-label="Mempelai" title="Mempelai">♡</a><a href="#Acara" aria-label="Acara" title="Acara">▦</a><a href="#galeri" aria-label="Galeri" title="Galeri">▧</a><a href="#Wishes" aria-label="RSVP" title="RSVP">✉</a><a href="#gift" aria-label="Gift" title="Gift">♢</a>
 </nav>
 <div id="toast"></div>
 <audio id="audio" loop></audio>
@@ -457,6 +463,15 @@ const CONFIG = {
   const $ = s => document.querySelector(s);
 
   const setText=(sel,val)=>{if(val){const el=$(sel);if(el)el.textContent=val}};
+  const applyText=(selector,value)=>{if(value!==undefined&&value!==null){const el=document.querySelector(selector);if(el)el.textContent=value}};
+  applyText('.cover-top',S.coverSubtitle);if(S.coverTitle)document.querySelector('.save-the-date').innerHTML='';if(S.coverTitle){const t=document.querySelector('.save-the-date');t.textContent=S.coverTitle;t.style.whiteSpace='pre-line'}
+  applyText('.cover-guest small',S.coverGreeting);applyText('#openBtn',S.coverButton);applyText('#buka .eyebrow',S.heroSubtitle);
+  applyText('#quote blockquote',S.quoteText);applyText('#quote cite',S.quoteSource);applyText('#galeri .title',S.galleryTitle);applyText('#Wishes .title',S.rsvpTitle);applyText('#gift .title',S.giftTitle);
+  const sectionFlags={showQuote:'#quote',showCouple:'#Mempelai',showEvents:'#Acara',showGallery:'#galeri',showRSVP:'#Wishes',showGift:'#gift',showIG:'#igfilter'};
+  for(const [key,selector] of Object.entries(sectionFlags)){if(S[key]==='false'){const el=document.querySelector(selector);if(el)el.style.display='none';const link=document.querySelector('nav a[href="'+selector+'"]');if(link)link.style.display='none'}}
+  if(S.showNav==='false')document.querySelector('nav').style.setProperty('display','none','important');
+  if(S.showMusic==='false')document.querySelector('#music').style.setProperty('display','none','important');
+  if(S.showOrnaments==='true')document.querySelectorAll('img.corner').forEach(el=>el.style.setProperty('display','block','important'));
   setText('.cover-names',S.couple);setText('.hero-names',S.couple);setText('.closing .names',S.couple);
   setText('#Mempelai .person:nth-of-type(1) h3',S.brideShort);
   const persons=document.querySelectorAll('#Mempelai .person');
