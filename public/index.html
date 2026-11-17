@@ -264,6 +264,14 @@ nav a{display:flex;align-items:center;justify-content:center;width:38px;height:3
 #Mempelai .person .photo{margin-top:8px}
 @media(max-width:480px){#buka .hero-card{padding:40px 15px 32px}#buka .hero-names{font-size:clamp(47px,12vw,72px)}}
 
+
+#buka .hero-names{display:flex;flex-direction:column;align-items:center;gap:0;line-height:1.02;margin:10px auto 22px;overflow-wrap:anywhere}
+#buka .hero-groom,#buka .hero-bride{font-size:clamp(54px,13vw,85px)}
+#buka .hero-amp{font-size:clamp(35px,8vw,55px);line-height:.78;color:var(--gold)}
+#buka .hero-card{padding-top:30px;padding-bottom:30px}
+#buka .hero-date{margin:12px 0 20px}
+#buka .countdown{margin:16px auto}
+nav .nav-custom-icon{width:23px;height:23px;object-fit:contain;display:block}
 </style>
 </head>
 <body class="locked">
@@ -313,7 +321,7 @@ const CONFIG = {
   <div class="wc c" style="width:300px;height:300px;bottom:-100px;left:-110px"></div>
   <div class="wrap hero-card">
     <div class="eyebrow reveal">The Wedding Of</div>
-    <h1 class="script hero-names reveal d1">Brandon &amp; Meyca</h1>
+    <h1 class="script hero-names reveal d1"><span class="hero-groom">Brandon</span><span class="hero-amp">&amp;</span><span class="hero-bride">Meyca</span></h1>
     <p class="lead reveal d2">We're getting married, and we want you to be a part of our special day!</p>
     <div class="hero-date reveal d2" id="dateLabel">Saturday, 12 December 2025</div>
     <div class="countdown reveal d3" id="countdown">
@@ -499,6 +507,8 @@ const CONFIG = {
   applyText('#igfilter .title',S.igTitle);applyText('#igfilter .lead',S.igDescription);applyText('#igBtn',S.igButtonLabel);
   const venuePhoto=$('#venuePhoto');if(S.venuePhoto){venuePhoto.src=S.venuePhoto;venuePhoto.hidden=false}else venuePhoto.hidden=true;
   const mapMode=S.mapDisplay||'photo';$('#venueMap').hidden=mapMode==='photo';venuePhoto.hidden=!S.venuePhoto||mapMode==='map';
+  if(S.coverBgImage){const cover=document.querySelector('#section-cover');cover.style.backgroundImage='linear-gradient(180deg,rgba(58,8,27,.30),rgba(58,8,27,.52)),url('+JSON.stringify(S.coverBgImage)+')';cover.style.backgroundSize='cover';cover.style.backgroundPosition='center'}
+  for(const [key,href] of Object.entries({navIconHome:'#buka',navIconCouple:'#Mempelai',navIconEvents:'#Acara',navIconGallery:'#galeri',navIconRSVP:'#Wishes',navIconGift:'#gift'})){if(S[key]){const link=document.querySelector('nav a[href="'+href+'"]');if(link){link.replaceChildren();const img=document.createElement('img');img.src=S[key];img.alt='';img.className='nav-custom-icon';link.appendChild(img)}}}
   const heroCard=document.querySelector('.hero-card');if(S.heroCardColor&&/^#[0-9a-fA-F]{6}$/.test(S.heroCardColor)){const n=parseInt(S.heroCardColor.slice(1),16);const a=Math.max(.1,Math.min(1,Number(S.heroCardOpacity)||.84));heroCard.style.backgroundColor='rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+a+')'}
   applyText('#quote blockquote',S.quoteText);applyText('#quote cite',S.quoteSource);applyText('#galeri .title',S.galleryTitle);applyText('#Wishes .title',S.rsvpTitle);applyText('#gift .title',S.giftTitle);
   const sectionFlags={showQuote:'#quote',showCouple:'#Mempelai',showEvents:'#Acara',showGallery:'#galeri',showRSVP:'#Wishes',showGift:'#gift',showIG:'#igfilter'};
@@ -514,9 +524,11 @@ const CONFIG = {
   const liveDest={afterCouple:'#Mempelai',afterEvents:'#Acara',afterGallery:'#galeri',afterRSVP:'#Wishes'}[S.livePlacement]||'#Acara';
   if(liveDest!=='#Acara'){const holder=document.createElement('section');holder.id='livestream';holder.className='live-section';const wrap=document.createElement('div');wrap.className='wrap';holder.appendChild(wrap);wrap.appendChild(live);const target=document.querySelector(liveDest);target.insertAdjacentElement('afterend',holder)}
 
-  setText('.cover-names',S.couple);setText('.hero-names',S.couple);setText('.closing .names',S.couple);
+  setText('.cover-names',S.couple);setText('.hero-groom',S.groomShort);setText('.hero-bride',S.brideShort);setText('.closing .names',S.couple);
   setText('#Mempelai .person:nth-of-type(1) h3',S.brideShort);
   const persons=document.querySelectorAll('#Mempelai .person');
+  if(persons[0]&&S.showBridePhoto==='false')persons[0].querySelector('.photo').style.display='none';
+  if(persons[1]&&S.showGroomPhoto==='false')persons[1].querySelector('.photo').style.display='none';
   if(persons[0]){setText('#Mempelai .person h3',S.brideShort);persons[0].querySelector('p').textContent=S.brideFamily||persons[0].querySelector('p').textContent;persons[0].querySelector('.photo img').src=S.bridePhoto||'assets/bride.jpg'}
   if(persons[1]){persons[1].querySelector('h3').textContent=S.groomShort||'Brandon';persons[1].querySelector('p').textContent=S.groomFamily||persons[1].querySelector('p').textContent;persons[1].querySelector('.photo img').src=S.groomPhoto||'assets/groom.jpg'}
   const events=document.querySelectorAll('.event-card');
