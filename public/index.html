@@ -249,6 +249,21 @@ nav a{display:flex;align-items:center;justify-content:center;width:38px;height:3
 .live-section{padding:55px 24px;background:var(--bg-deep)}
 .live-section #liveBlock{max-width:var(--maxw);margin:auto}
 
+
+/* Unified watercolor backgrounds, no hard section breaks */
+:root{--section-texture:url("assets/bg-pattern.jpg")}
+#buka,#quote,#Mempelai,#Acara,#galeri,#Wishes,#gift,#igfilter,.closing,.live-section{background-image:linear-gradient(180deg,rgba(113,25,53,.25),rgba(113,25,53,.12)),var(--section-texture)!important;background-position:center center!important;background-size:cover!important;background-attachment:scroll!important}
+#buka .hero-card{max-width:620px;width:100%;padding:45px 22px 38px;border-radius:24px;border:1px solid rgba(255,224,204,.35);background:rgba(181,111,137,.84);box-shadow:0 18px 50px rgba(59,8,30,.18);backdrop-filter:blur(3px)}
+#buka{padding:44px 22px 68px}
+#buka .countdown{gap:8px}
+#buka .countdown>div{min-width:0}
+.venue-media{width:100%;margin:18px auto;border-radius:15px;overflow:hidden}
+#venuePhoto{display:block;width:100%;height:240px;object-fit:cover}
+#venuePhoto[hidden],#venueMap[hidden]{display:none!important}
+#Mempelai .person .orn{display:none!important}
+#Mempelai .person .photo{margin-top:8px}
+@media(max-width:480px){#buka .hero-card{padding:40px 15px 32px}#buka .hero-names{font-size:clamp(47px,12vw,72px)}}
+
 </style>
 </head>
 <body class="locked">
@@ -296,7 +311,7 @@ const CONFIG = {
 <section id="buka">
   <div class="wc a" style="width:340px;height:340px;top:-110px;right:-120px"></div>
   <div class="wc c" style="width:300px;height:300px;bottom:-100px;left:-110px"></div>
-  <div class="wrap">
+  <div class="wrap hero-card">
     <div class="eyebrow reveal">The Wedding Of</div>
     <h1 class="script hero-names reveal d1">Brandon &amp; Meyca</h1>
     <p class="lead reveal d2">We're getting married, and we want you to be a part of our special day!</p>
@@ -368,7 +383,7 @@ const CONFIG = {
       <div class="when">Saturday, 12 December 2025</div>
       <div class="time">11.00 – 14.00 WIB</div>
       <div class="place"><b>Nama Gedung / Venue</b>Jl. Contoh No. 123, Jakarta</div>
-      <div class="map"><iframe id="mapFrame" loading="lazy" title="Lokasi"></iframe></div>
+      <div class="venue-media"><img id="venuePhoto" alt="Foto lokasi acara" loading="lazy"><div class="map" id="venueMap"><iframe id="mapFrame" loading="lazy" title="Lokasi"></iframe></div></div>
       <a class="btn" id="mapLink" target="_blank" rel="noopener">Buka Google Maps</a>
     </div>
 
@@ -386,7 +401,7 @@ const CONFIG = {
   <img class="corner tr" src="assets/ornament-corner-top-right.png" alt="">
   <div class="wrap">
     <h2 class="title reveal">Our Moment</h2>
-    <p class="poem reveal">“Doubt thou the stars are fire;<br>Doubt that the sun doth move;<br>Doubt truth to be a liar;<br>But never doubt I love.”</p>
+    <p class="poem reveal">Jangan ragukan cinta yang tumbuh dan menguatkan kami.</p>
     <div class="grid reveal" id="grid"></div>
   </div>
 </section>
@@ -403,13 +418,13 @@ const CONFIG = {
 
       <label for="f-guests">How many guests with you?</label>
       <select id="f-guests">
-        <option>One</option><option>Two</option><option>Three</option><option>None</option>
+        <option value="One">1 orang</option><option value="Two">2 orang</option><option value="Three">3 orang</option><option value="None">Tidak ada</option>
       </select>
 
       <label for="f-att">Will you be there?</label>
       <select id="f-att">
-        <option>I'll definitely be there</option>
-        <option>I'm so sorry, but I won't be able to make it</option>
+        <option value="I'll definitely be there">Ya, saya akan hadir</option>
+        <option value="I'm so sorry, but I won't be able to make it">Maaf, saya tidak bisa hadir</option>
       </select>
 
       <label for="f-wish">Your Wishes</label>
@@ -475,6 +490,16 @@ const CONFIG = {
   const applyText=(selector,value)=>{if(value!==undefined&&value!==null){const el=document.querySelector(selector);if(el)el.textContent=value}};
   applyText('.cover-top',S.coverSubtitle);if(S.coverTitle)document.querySelector('.save-the-date').innerHTML='';if(S.coverTitle){const t=document.querySelector('.save-the-date');t.textContent=S.coverTitle;t.style.whiteSpace='pre-line'}
   applyText('.cover-guest small',S.coverGreeting);applyText('#openBtn',S.coverButton);applyText('#buka .eyebrow',S.heroSubtitle);
+  applyText('#buka .lead',S.heroLead);applyText('#Acara .title',S.eventTitle);applyText('#galeri .poem',S.galleryQuote);applyText('#gift .lead',S.giftDescription);applyText('#qrisGift p',S.qrisDescription);applyText('#bankGift button',S.bankButtonLabel);applyText('#saveDateBtn',S.saveDateLabel);
+  applyText('#Wishes label[for="f-name"]',S.rsvpNameLabel);applyText('#Wishes label[for="f-guests"]',S.rsvpGuestsLabel);applyText('#Wishes label[for="f-att"]',S.rsvpAttendanceLabel);applyText('#Wishes label[for="f-wish"]',S.rsvpWishesLabel);applyText('#rsvp button[type="submit"]',S.rsvpSubmitLabel);
+  if(S.rsvpNamePlaceholder)$('#f-name').placeholder=S.rsvpNamePlaceholder;if(S.rsvpWishesPlaceholder)$('#f-wish').placeholder=S.rsvpWishesPlaceholder;
+  applyText('.closing .wrap>p',S.closingText);applyText('.closing .eyebrow',S.closingEyebrow);applyText('footer',S.footerTitle);
+  if(S.footerTitle||S.footerSubtitle||S.footerCopyright){const footer=document.querySelector('footer');footer.replaceChildren();for(const [text,tag] of [[S.footerTitle,'div'],[S.footerSubtitle,'small'],[S.footerCopyright,'small']]){if(text){const el=document.createElement(tag);el.textContent=text;footer.appendChild(el)}}}
+  if(S.showClosing==='false')document.querySelector('.closing').style.display='none';if(S.showFooter==='false')document.querySelector('footer').style.display='none';
+  applyText('#igfilter .title',S.igTitle);applyText('#igfilter .lead',S.igDescription);applyText('#igBtn',S.igButtonLabel);
+  const venuePhoto=$('#venuePhoto');if(S.venuePhoto){venuePhoto.src=S.venuePhoto;venuePhoto.hidden=false}else venuePhoto.hidden=true;
+  const mapMode=S.mapDisplay||'photo';$('#venueMap').hidden=mapMode==='photo';venuePhoto.hidden=!S.venuePhoto||mapMode==='map';
+  const heroCard=document.querySelector('.hero-card');if(S.heroCardColor&&/^#[0-9a-fA-F]{6}$/.test(S.heroCardColor)){const n=parseInt(S.heroCardColor.slice(1),16);const a=Math.max(.1,Math.min(1,Number(S.heroCardOpacity)||.84));heroCard.style.backgroundColor='rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+a+')'}
   applyText('#quote blockquote',S.quoteText);applyText('#quote cite',S.quoteSource);applyText('#galeri .title',S.galleryTitle);applyText('#Wishes .title',S.rsvpTitle);applyText('#gift .title',S.giftTitle);
   const sectionFlags={showQuote:'#quote',showCouple:'#Mempelai',showEvents:'#Acara',showGallery:'#galeri',showRSVP:'#Wishes',showGift:'#gift',showIG:'#igfilter'};
   for(const [key,selector] of Object.entries(sectionFlags)){if(S[key]==='false'){const el=document.querySelector(selector);if(el)el.style.display='none';const link=document.querySelector('nav a[href="'+selector+'"]');if(link)link.style.display='none'}}
@@ -495,13 +520,13 @@ const CONFIG = {
   if(persons[0]){setText('#Mempelai .person h3',S.brideShort);persons[0].querySelector('p').textContent=S.brideFamily||persons[0].querySelector('p').textContent;persons[0].querySelector('.photo img').src=S.bridePhoto||'assets/bride.jpg'}
   if(persons[1]){persons[1].querySelector('h3').textContent=S.groomShort||'Brandon';persons[1].querySelector('p').textContent=S.groomFamily||persons[1].querySelector('p').textContent;persons[1].querySelector('.photo img').src=S.groomPhoto||'assets/groom.jpg'}
   const events=document.querySelectorAll('.event-card');
-  if(events[0]){events[0].querySelector('h3').textContent=S.ceremony||'Akad Nikah';events[0].querySelector('.when').textContent=S.ceremonyDate||CONFIG.dateLabel;events[0].querySelector('.time').textContent=S.ceremonyTime||'08.00 – 10.00 WIB';events[0].querySelector('.place').textContent=(S.venue||'Nama Gedung')+' — '+(S.address||'Alamat acara')}
-  if(events[1]){events[1].querySelector('h3').textContent=S.reception||'Resepsi';events[1].querySelector('.when').textContent=S.receptionDate||CONFIG.dateLabel;events[1].querySelector('.time').textContent=S.receptionTime||'11.00 – 14.00 WIB';events[1].querySelector('.place').textContent=(S.venue||'Nama Gedung')+' — '+(S.address||'Alamat acara')}
+  if(events[0]){events[0].querySelector('h3').textContent=S.ceremony||'Akad Nikah';events[0].querySelector('.when').textContent=S.ceremonyDate||CONFIG.dateLabel;events[0].querySelector('.time').textContent=S.ceremonyTime||'08.00 – 10.00 WIB';events[0].querySelector('.place').textContent=(S.ceremonyVenue||S.venue||'Nama Gedung')+' — '+(S.ceremonyAddress||S.address||'Alamat acara')}
+  if(events[1]){events[1].querySelector('h3').textContent=S.reception||'Resepsi';events[1].querySelector('.when').textContent=S.receptionDate||CONFIG.dateLabel;events[1].querySelector('.time').textContent=S.receptionTime||'11.00 – 14.00 WIB';events[1].querySelector('.place').textContent=(S.receptionVenue||S.venue||'Nama Gedung')+' — '+(S.receptionAddress||S.address||'Alamat acara')}
   $('#bankName').textContent=S.bank||'Bank belum diatur';$('#bankAccount').textContent=S.account||'Nomor rekening belum diatur';$('#bankOwner').textContent=S.accountName||'';
   if(S.qrisImage)$('#qrisPicture').src=S.qrisImage;
   if(S.bgColor)document.documentElement.style.setProperty('--bg',S.bgColor);
   if(S.goldColor)document.documentElement.style.setProperty('--gold',S.goldColor);
-  if(S.bgImage)document.querySelectorAll('section').forEach(el=>el.style.backgroundImage='url('+JSON.stringify(S.bgImage)+')');
+  if(S.bgImage){document.documentElement.style.setProperty('--section-texture','url('+JSON.stringify(S.bgImage)+')');if(S.sectionBackgroundMode==='solid')document.querySelectorAll('section:not(#section-cover)').forEach(el=>el.style.backgroundImage='none')}
   if(S.ornamentTop)document.querySelectorAll('img.corner.tr').forEach(el=>el.src=S.ornamentTop);
   if(S.ornamentBottom)document.querySelectorAll('img.corner.bl').forEach(el=>el.src=S.ornamentBottom);
   /* --- Nama tamu dari URL: ?to=Budi+Santoso --- */
@@ -545,18 +570,13 @@ const CONFIG = {
   }
   tick(); setInterval(tick,1000);
 
-  /* --- Save the Date -> file .ics --- */
-  $('#saveDateBtn').addEventListener('click', e => {
-    e.preventDefault();
-    const dt = new Date(CONFIG.weddingDate);
-    const f = d => d.toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
-    const end = new Date(dt.getTime()+4*36e5);
-    const ics = ['BEGIN:VCALENDAR','VERSION:2.0','BEGIN:VEVENT',
-      'SUMMARY:The Wedding of '+CONFIG.groomShort+' & '+CONFIG.brideShort,
-      'DTSTART:'+f(dt),'DTEND:'+f(end),'END:VEVENT','END:VCALENDAR'].join('\r\n');
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob([ics],{type:'text/calendar'}));
-    a.download = 'wedding.ics'; a.click();
+  /* Google Calendar: opens an editable event in the guest's account */
+  $('#saveDateBtn').addEventListener('click',e=>{
+    e.preventDefault();const start=new Date(CONFIG.weddingDate);if(Number.isNaN(start.getTime())){alert('Tanggal acara belum valid');return}
+    const format=d=>d.toISOString().replace(/[-:]/g,'').replace(/\\.\\d{3}Z$/,'Z');
+    const end=new Date(start.getTime()+4*60*60*1000);
+    const params=new URLSearchParams({action:'TEMPLATE',text:'Pernikahan '+CONFIG.groomShort+' & '+CONFIG.brideShort,dates:format(start)+'/'+format(end),details:'Undangan pernikahan',location:[S.receptionVenue||S.venue,S.receptionAddress||S.address].filter(Boolean).join(', ')});
+    window.open('https://calendar.google.com/calendar/render?'+params.toString(),'_blank','noopener,noreferrer');
   });
 
   /* --- Galeri + lightbox --- */
