@@ -210,6 +210,16 @@ body.opened nav,body.opened #music{display:flex}
   section{padding:100px 24px}
   .hero-names{font-size:84px}
 }
+
+/* Fix: supplied ornament PNGs contain printed placeholder labels.
+   Hide those labels until actual transparent watercolor floral assets are uploaded. */
+#section-cover > img.corner, section > img.corner{display:none!important}
+#section-cover{background:radial-gradient(ellipse 90% 45% at 50% -10%,rgba(248,205,214,.32),transparent 80%),radial-gradient(ellipse 90% 35% at 50% 110%,rgba(236,185,199,.30),transparent 80%),var(--bg) url("assets/bg-pattern.jpg") center/cover}
+#section-cover:before,#section-cover:after{content:"";position:absolute;pointer-events:none;z-index:0;width:48vw;max-width:260px;aspect-ratio:1;border-radius:42% 58% 67% 33%;filter:blur(18px);opacity:.3;background:radial-gradient(circle at 25% 25%,#f5bac5 0 14%,transparent 35%),radial-gradient(circle at 72% 52%,#efb0c3 0 18%,transparent 45%),radial-gradient(circle at 45% 76%,#e6a6b8 0 12%,transparent 40%)}
+#section-cover:before{top:-7%;right:-12%;transform:rotate(25deg)}
+#section-cover:after{bottom:-10%;left:-12%;transform:rotate(-20deg)}
+#section-cover .wrap{position:relative;z-index:2}
+
 </style>
 </head>
 <body class="locked">
