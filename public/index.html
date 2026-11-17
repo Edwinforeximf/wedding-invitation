@@ -493,7 +493,7 @@ const CONFIG = {
   applyText('#buka .lead',S.heroLead);applyText('#Acara .title',S.eventTitle);applyText('#galeri .poem',S.galleryQuote);applyText('#gift .lead',S.giftDescription);applyText('#qrisGift p',S.qrisDescription);applyText('#bankGift button',S.bankButtonLabel);applyText('#saveDateBtn',S.saveDateLabel);
   applyText('#Wishes label[for="f-name"]',S.rsvpNameLabel);applyText('#Wishes label[for="f-guests"]',S.rsvpGuestsLabel);applyText('#Wishes label[for="f-att"]',S.rsvpAttendanceLabel);applyText('#Wishes label[for="f-wish"]',S.rsvpWishesLabel);applyText('#rsvp button[type="submit"]',S.rsvpSubmitLabel);
   if(S.rsvpNamePlaceholder)$('#f-name').placeholder=S.rsvpNamePlaceholder;if(S.rsvpWishesPlaceholder)$('#f-wish').placeholder=S.rsvpWishesPlaceholder;
-  applyText('.closing .wrap>p',S.closingText);applyText('.closing .eyebrow',S.closingEyebrow);applyText('footer',S.footerTitle);
+  applyText('.closing .wrap>p',S.closingText);applyText('.closing .eyebrow',S.closingEyebrow);
   if(S.footerTitle||S.footerSubtitle||S.footerCopyright){const footer=document.querySelector('footer');footer.replaceChildren();for(const [text,tag] of [[S.footerTitle,'div'],[S.footerSubtitle,'small'],[S.footerCopyright,'small']]){if(text){const el=document.createElement(tag);el.textContent=text;footer.appendChild(el)}}}
   if(S.showClosing==='false')document.querySelector('.closing').style.display='none';if(S.showFooter==='false')document.querySelector('footer').style.display='none';
   applyText('#igfilter .title',S.igTitle);applyText('#igfilter .lead',S.igDescription);applyText('#igBtn',S.igButtonLabel);
@@ -573,7 +573,7 @@ const CONFIG = {
   /* Google Calendar: opens an editable event in the guest's account */
   $('#saveDateBtn').addEventListener('click',e=>{
     e.preventDefault();const start=new Date(CONFIG.weddingDate);if(Number.isNaN(start.getTime())){alert('Tanggal acara belum valid');return}
-    const format=d=>d.toISOString().replace(/[-:]/g,'').replace(/\\.\\d{3}Z$/,'Z');
+    const format=d=>d.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}Z$/,'Z');
     const end=new Date(start.getTime()+4*60*60*1000);
     const params=new URLSearchParams({action:'TEMPLATE',text:'Pernikahan '+CONFIG.groomShort+' & '+CONFIG.brideShort,dates:format(start)+'/'+format(end),details:'Undangan pernikahan',location:[S.receptionVenue||S.venue,S.receptionAddress||S.address].filter(Boolean).join(', ')});
     window.open('https://calendar.google.com/calendar/render?'+params.toString(),'_blank','noopener,noreferrer');
