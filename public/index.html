@@ -625,8 +625,11 @@ const CONFIG = {
     }catch(e){wishesEl.textContent='Ucapan belum dapat dimuat.'}
   }
   loadWishes();
-  const token=new URLSearchParams(location.search).get('token');
-  if(token)fetch('/api/guest/'+encodeURIComponent(token)).then(r=>r.json()).then(x=>{if(x.guest){$('#guestName').textContent=x.guest.name;$('#f-name').value=x.guest.name}}).catch(()=>{});
+  let token=new URLSearchParams(location.search).get('token');
+  const guestSlug=location.pathname.match(/^\/untuk\/([^/]+)$/);
+  const guestId=guestSlug?guestSlug[1].match(/-(\d+)$/):null;
+  const guestUrl=guestId?'/api/guest-by-id/'+guestId[1]:token?'/api/guest/'+encodeURIComponent(token):null;
+  if(guestUrl)fetch(guestUrl).then(r=>r.json()).then(x=>{if(x.guest){$('#guestName').textContent=x.guest.name;$('#f-name').value=x.guest.name;if(x.guest.token)token=x.guest.token}}).catch(()=>{});
   $('#rsvp').addEventListener('submit', async e => {
     e.preventDefault();const btn=e.target.querySelector('[type=submit]');btn.disabled=true;
     const name=$('#f-name').value.trim(),message=$('#f-wish').value.trim();
