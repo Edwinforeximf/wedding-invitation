@@ -213,7 +213,7 @@ body.opened nav,body.opened #music{display:flex}
 
 /* Fix: supplied ornament PNGs contain printed placeholder labels.
    Hide those labels until actual transparent watercolor floral assets are uploaded. */
-#section-cover > img.corner, section > img.corner{display:none!important}
+#section-cover > img.corner, section > img.corner{display:none}
 #section-cover{background:radial-gradient(ellipse 90% 45% at 50% -10%,rgba(248,205,214,.32),transparent 80%),radial-gradient(ellipse 90% 35% at 50% 110%,rgba(236,185,199,.30),transparent 80%),var(--bg) url("assets/bg-pattern.jpg") center/cover}
 #section-cover:before,#section-cover:after{content:"";position:absolute;pointer-events:none;z-index:0;width:48vw;max-width:260px;aspect-ratio:1;border-radius:42% 58% 67% 33%;filter:blur(18px);opacity:.3;background:radial-gradient(circle at 25% 25%,#f5bac5 0 14%,transparent 35%),radial-gradient(circle at 72% 52%,#efb0c3 0 18%,transparent 45%),radial-gradient(circle at 45% 76%,#e6a6b8 0 12%,transparent 40%)}
 #section-cover:before{top:-7%;right:-12%;transform:rotate(25deg)}
@@ -272,6 +272,11 @@ nav a{display:flex;align-items:center;justify-content:center;width:38px;height:3
 #buka .hero-date{margin:12px 0 20px}
 #buka .countdown{margin:16px auto}
 nav .nav-custom-icon{width:23px;height:23px;object-fit:contain;display:block}
+
+#section-cover .corner{position:absolute;z-index:2;pointer-events:none;width:min(46vw,235px);height:auto;object-fit:contain}
+#section-cover .corner.tr{top:0;right:0}
+#section-cover .corner.bl{bottom:0;left:0}
+#section-cover .wrap{z-index:3}
 </style>
 </head>
 <body class="locked">
@@ -507,7 +512,7 @@ const CONFIG = {
   applyText('#igfilter .title',S.igTitle);applyText('#igfilter .lead',S.igDescription);applyText('#igBtn',S.igButtonLabel);
   const venuePhoto=$('#venuePhoto');if(S.venuePhoto){venuePhoto.src=S.venuePhoto;venuePhoto.hidden=false}else venuePhoto.hidden=true;
   const mapMode=S.mapDisplay||'photo';$('#venueMap').hidden=mapMode==='photo';venuePhoto.hidden=!S.venuePhoto||mapMode==='map';
-  if(S.coverBgImage){const cover=document.querySelector('#section-cover');cover.style.backgroundImage='linear-gradient(180deg,rgba(58,8,27,.30),rgba(58,8,27,.52)),url('+JSON.stringify(S.coverBgImage)+')';cover.style.backgroundSize='cover';cover.style.backgroundPosition='center'}
+  if(S.coverBgImage){cover.style.setProperty('background-image','linear-gradient(180deg,rgba(58,8,27,.15),rgba(58,8,27,.35)),url('+JSON.stringify(S.coverBgImage)+')','important');cover.style.setProperty('background-size','cover','important');cover.style.setProperty('background-position','center','important')}
   for(const [key,href] of Object.entries({navIconHome:'#buka',navIconCouple:'#Mempelai',navIconEvents:'#Acara',navIconGallery:'#galeri',navIconRSVP:'#Wishes',navIconGift:'#gift'})){if(S[key]){const link=document.querySelector('nav a[href="'+href+'"]');if(link){link.replaceChildren();const img=document.createElement('img');img.src=S[key];img.alt='';img.className='nav-custom-icon';link.appendChild(img)}}}
   const heroCard=document.querySelector('.hero-card');if(S.heroCardColor&&/^#[0-9a-fA-F]{6}$/.test(S.heroCardColor)){const n=parseInt(S.heroCardColor.slice(1),16);const a=Math.max(.1,Math.min(1,Number(S.heroCardOpacity)||.84));heroCard.style.backgroundColor='rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+a+')'}
   applyText('#quote blockquote',S.quoteText);applyText('#quote cite',S.quoteSource);applyText('#galeri .title',S.galleryTitle);applyText('#Wishes .title',S.rsvpTitle);applyText('#gift .title',S.giftTitle);
@@ -515,7 +520,13 @@ const CONFIG = {
   for(const [key,selector] of Object.entries(sectionFlags)){if(S[key]==='false'){const el=document.querySelector(selector);if(el)el.style.display='none';const link=document.querySelector('nav a[href="'+selector+'"]');if(link)link.style.display='none'}}
   if(S.showNav==='false')document.querySelector('nav').style.setProperty('display','none','important');
   if(S.showMusic==='false')document.querySelector('#music').style.setProperty('display','none','important');
-  if(S.showOrnaments==='true')document.querySelectorAll('img.corner').forEach(el=>el.style.setProperty('display','block','important'));
+  // Cover ornament overrides: user uploads win over template placeholders.
+  const cover=document.querySelector('#section-cover');
+  for(const [selector,url] of [['.corner.tr',S.ornamentTop],['.corner.bl',S.ornamentBottom]]){
+    const el=cover.querySelector(selector);if(!el)continue;
+    const isPlaceholder=!url||/ornament-corner-(top-right|bottom-left)\.png/.test(url);
+    if(!isPlaceholder){el.src=url;el.style.setProperty('display','block','important')}else el.style.setProperty('display','none','important');
+  }
   const personOrnaments=document.querySelectorAll('#Mempelai .person .orn');
   [0,1].forEach(i=>{const el=personOrnaments[i];if(!el)return;const url=i===0?S.brideOrnament:S.groomOrnament;const enabled=i===0?S.showBrideOrnament:S.showGroomOrnament;el.style.display=enabled==='true'&&url?'block':'none';if(url)el.src=url});
   applyText('#Mempelai .lead',S.coupleIntro);
