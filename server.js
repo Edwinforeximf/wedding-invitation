@@ -40,7 +40,7 @@ const mediaUpload=multer({storage:multer.diskStorage({destination:uploadDir,file
 app.post('/api/upload',auth,(req,res)=>mediaUpload.single('file')(req,res,err=>{if(err)return res.status(400).json({error:'Upload gagal: maksimal 12 MB, JPG/PNG/WebP/GIF/MP3'});if(!req.file)return res.status(400).json({error:'Format file tidak didukung'});res.json({ok:true,url:'/uploads/'+req.file.filename})}));
 app.use('/uploads',express.static(uploadDir,{immutable:true,maxAge:'1y'}));
 app.use(express.static(path.join(root,'public')));
-const htmlEscape=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\\'':'&#39;'}[c]));
+const htmlEscape=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]||'&#39;'));
 function invitationPage(req,res){
  const config=settings();const name=(config.couple||[config.groomShort,config.brideShort].filter(Boolean).join(' & ')).trim();
  const idMatch=(req.params.slug||'').match(/-(\\d+)$/);
