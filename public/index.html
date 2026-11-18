@@ -647,7 +647,7 @@ const CONFIG = {
   }
   loadWishes();
   let token=new URLSearchParams(location.search).get('token');
-  const guestSlug=location.pathname.match(/^\/untuk\/([^/]+)$/);
+  const guestSlug=location.pathname.match(/\/(?:untuk)\/([^/]+)$/);
   const guestId=guestSlug?guestSlug[1].match(/-(\d+)$/):null;
   const guestUrl=guestId?'/api/guest-by-id/'+guestId[1]:token?'/api/guest/'+encodeURIComponent(token):null;
   if(guestUrl)fetch(guestUrl).then(r=>r.json()).then(x=>{if(x.guest){$('#guestName').textContent=x.guest.name;$('#f-name').value=x.guest.name;if(x.guest.token)token=x.guest.token}}).catch(()=>{});
